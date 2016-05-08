@@ -1,0 +1,106 @@
+<!-- Copyright 2016 Google Inc. All rights reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+	<title>paperGUI demo</title>
+</head>
+<body>
+	<h1>paperGUI demo</h1>
+  <h2 id="demo"></h2>
+
+	<script type="text/javascript">
+    // Build a basic demo. All config variables are placed in a JS Object.
+    var myDemo = {};
+    myDemo.sayHello = function() {
+      var message = '';
+      for (var i = 0; i < myDemo.times; i++) {
+        message += (myDemo.toggle ? 'hello ' : 'good bye ') + myDemo.message + '<br>';
+      }
+      document.getElementById('demo').innerHTML = message;
+    }
+    myDemo.toggle = true;
+    myDemo.message = 'world';
+    myDemo.times = 1;
+    myDemo.nothing = 1;
+    myDemo.sayHello();
+
+    // Now let's create a fancy paper GUI!
+    document.addEventListener('PaperGUIReady', function(e) {
+      // Polymer elements are loaded asynchronously, we wait for them to be ready before creating the GUI.
+      window.myGUI = new PaperGUI();
+      myGUI.add(myDemo, 'toggle').name('Hello').onChange(myDemo.sayHello);
+      myGUI.add(myDemo, 'message').name('Who are you?');
+      myGUI.add(myDemo, 'sayHello').name('Update text');
+      myGUI.add(myDemo, 'times').max(10).min(1).step(0.01).onChange(myDemo.sayHello);
+      myGUI.add(myDemo, 'nothing', -5, 5).name('Another one that does nothing');
+      myGUI.add(myDemo, 'message', ['earth', 'world', 'moon', 'system']).name('Yay, menus!')
+          .onChange(function(val) {
+            console.log(val);
+            myDemo.sayHello();
+          });
+      myGUI.add(myDemo, 'times', {'Once':1, 'Twice':2, '10X':10})
+          .name('Yay, menus with labels!').onChange(myDemo.sayHello);
+    });
+	</script>
+
+  <code><pre>
+    // Build a basic demo. All config variables are placed in a JS Object.
+    var myDemo = {};
+    myDemo.sayHello = function() {
+      var message = '';
+      for (var i = 0; i < myDemo.times; i++) {
+        message += (myDemo.toggle ? 'hello ' : 'good bye ') + myDemo.message + '&lt;br&gt;';
+      }
+      document.getElementById('demo').innerHTML = message;
+    }
+    myDemo.toggle = true;
+    myDemo.message = 'world';
+    myDemo.times = 1;
+    myDemo.sayHello();
+
+    <strong>
+    // Now let's create a fancy paper GUI!
+    document.addEventListener('PaperGUIReady', function(e) {
+      // Polymer elements are loaded asynchronously, we wait for them to be ready before creating the GUI.
+      var myGUI = new PaperGUI();
+      myGUI.add(myDemo, 'toggle').name('Hello').onChange(myDemo.sayHello);
+      myGUI.add(myDemo, 'message').name('Who are you?');
+      myGUI.add(myDemo, 'sayHello').name('Update text');
+      myGUI.add(myDemo, 'times').max(10).min(1).step(0.01).onChange(myDemo.sayHello);
+      myGUI.add(myDemo, 'nothing', -5, 5).name('Another one that does nothing');
+      myGUI.add(myDemo, 'message', ['earth', 'world', 'moon', 'system']).name('Yay, menus!')
+          .onChange(function(val) {
+            console.log(val);
+            myDemo.sayHello();
+          });
+      myGUI.add(myDemo, 'times', {'Once':1, 'Twice':2, '10X':10})
+          .name('Yay, menus with labels!').onChange(myDemo.sayHello);
+    });
+    </strong>
+  </pre></code>
+
+  <p>Then, at the end of the HTML file, start loading paperGUI:</p>
+  <code><pre>  &lt;script src="dist/paperGUI.js"&gt;&lt;/script&gt;</pre></code>
+  <p>This asynchronously loads the webcomponent polyfill then the paperGUI library and elements.</p>
+
+  <p>Alternatively, you can use a (blocking) webcomponent import instead of this loader.</p>
+  <code><pre>  &lt;link rel="import" href="dist/paper-gui.html"&gt;</pre></code>
+  <p>Note that the <code>PaperGUIReady</code> event won't be triggered and the import will only work on webcomponent-ready browsers as this bypasses support detection and polyfill loading.</p>
+
+  <script src="dist/paperGUI.js"></script>
+</body>
+</html>

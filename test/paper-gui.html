@@ -1,0 +1,207 @@
+<!-- Copyright 2016 Google Inc. All rights reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// -->
+<!doctype html>
+
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>PaperGUI tests</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../bower_components/web-component-tester/browser.js"></script>
+  <script src="../bower_components/test-fixture/test-fixture-mocha.js"></script>
+  <script src="../bower_components/iron-test-helpers/mock-interactions.js"></script>
+
+  <link rel="import" href="../bower_components/test-fixture/test-fixture.html">
+
+  <link rel="import" href="../dist/paper-gui.html">
+
+</head>
+<body>
+
+  <test-fixture id="PaperGUI">
+    <template>
+      <paper-gui></paper-gui>
+    </template>
+  </test-fixture>
+
+  <script>
+
+    suite('Polymer element', function() {
+
+      suite('behavior', function() {
+
+        var dialogEl;
+        var fabEl;
+        var closeBtnEl;
+
+        setup(function() {
+          var paperGUIEl = fixture('PaperGUI');
+          dialogEl = paperGUIEl.querySelector('paper-dialog');
+          fabEl = paperGUIEl.querySelector('paper-fab');
+          closeBtnEl = paperGUIEl.querySelector('.buttons paper-button');
+        });
+
+        test('dropdown is initially closed', function() {
+          assert.isFalse(dialogEl.opened);
+        });
+
+        test('tapping the fab opens the dialog', function(done) {
+          MockInteractions.downAndUp(fabEl, function() {
+            Polymer.Base.async(function() {
+              assert.isTrue(dialogEl.opened);
+              done();
+            }, 100);
+          });
+        });
+
+        test('tapping the close button closes the dialog', function(done) {
+          MockInteractions.downAndUp(closeBtnEl, function() {
+            Polymer.Base.async(function() {
+              assert.isFalse(dialogEl.opened);
+              done();
+            }, 100);
+          });
+        });
+
+      });
+
+      suite('public functions', function() {
+
+        var paperGUIEl;
+        var dialogEl;
+
+        setup(function() {
+          paperGUIEl = fixture('PaperGUI');
+          dialogEl = paperGUIEl.querySelector('paper-dialog');
+        });
+
+        test('open()', function() {
+          paperGUIEl.open();
+          assert.isTrue(dialogEl.opened);
+        });
+
+        test('close()', function() {
+          paperGUIEl.close();
+          assert.isFalse(dialogEl.opened);
+        });
+
+        test('toggleDialog()', function() {
+          paperGUIEl.toggleDialog();
+          assert.isTrue(dialogEl.opened);
+        });
+
+      });
+
+    });
+
+    suite('JS library', function() {
+
+      test('PaperGUI constructor is available', function() {
+        assert.isDefined(window.PaperGUI);
+      });
+
+      suite('instantiation', function() {
+
+        var paperGUI;
+        var testObj;
+
+        setup(function() {
+          paperGUI = new PaperGUI();
+          testObj = {
+            'number': 42,
+            'string': 'fox',
+            'boolean': true
+          };
+        });
+
+        teardown(function() {
+          document.querySelector('paper-gui').remove();
+          paperGUI = null;
+        });
+
+        test('GUI not appended to DOM until first add() call', function() {
+          assert.isNull(document.querySelector('paper-gui'));
+          paperGUI.add(testObj, 'boolean');
+          assert.isDefined(document.querySelector('paper-gui'));
+        });
+
+      });
+
+      suite('other API functions', function() {
+
+        var paperGUI;
+        var paperGUIEl;
+        var HIDE_DIALOG_SHORTCUT_KEYCODE = 72;
+
+        setup(function() {
+          paperGUI = new PaperGUI();
+          var dummy = {
+            'prop': true
+          };
+          paperGUI.add(dummy, 'prop');
+          paperGUIEl = document.querySelector('paper-gui');
+        });
+
+        teardown(function() {
+          paperGUIEl.remove();
+          paperGUIEl = null;
+          paperGUI = null;
+        });
+
+        test('open()', function() {
+          paperGUI.open();
+          assert.isTrue(paperGUIEl.querySelector('paper-dialog').opened);
+        });
+
+        test('close()', function() {
+          paperGUI.open();
+          paperGUI.close();
+          assert.isFalse(paperGUIEl.querySelector('paper-dialog').opened);
+        });
+
+        test('hide()', function() {
+          paperGUI.hide();
+          assert.isTrue(paperGUIEl.hidden);
+        });
+
+        test('show()', function() {
+          paperGUI.hide();
+          paperGUI.show();
+          assert.isFalse(paperGUIEl.hidden);
+        });
+
+        test('h key shortcut', function(done) {
+          MockInteractions.pressAndReleaseKeyOn(document.body, HIDE_DIALOG_SHORTCUT_KEYCODE);
+          Polymer.Base.async(function() {
+            // The GUI should be hidden.
+            assert.isTrue(paperGUIEl.hidden);
+            MockInteractions.pressAndReleaseKeyOn(document.body, HIDE_DIALOG_SHORTCUT_KEYCODE);
+            // The GUI should be visible again.
+            Polymer.Base.async(function() {
+              assert.isFalse(paperGUIEl.hidden);
+              done();
+            }, 100);
+          }, 100);
+        });
+
+      });
+
+    });
+  </script>
+
+</body>
+</html>

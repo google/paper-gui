@@ -1,0 +1,133 @@
+<!-- Copyright 2016 Google Inc. All rights reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// -->
+<!doctype html>
+
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>PaperGUI tests - SelectPaperGUIController</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../bower_components/web-component-tester/browser.js"></script>
+  <script src="../bower_components/iron-test-helpers/mock-interactions.js"></script>
+
+  <link rel="import" href="../dist/paper-gui.html">
+
+</head>
+<body>
+
+  <script>
+
+      suite('SelectPaperGUIController (string property w/ argument for possible values)', function() {
+
+        var paperGUI;
+        var selectController;
+        var OPTIONS_ARRAY = ['value1', 'value2'];
+        var OPTIONS_OBJECT = {
+          'Value One': 'value1',
+          '2 value': 'value2'
+        };
+
+        setup(function() {
+          paperGUI = new PaperGUI();
+          testObj = {
+            'select': 'value1'
+          };
+        });
+
+        teardown(function() {
+          document.querySelector('paper-gui').remove();
+          paperGUI = null;
+          selectController = null;
+        });
+
+        test('add select controller (array type parameter)', function() {
+          selectController = paperGUI.add(testObj, 'select', OPTIONS_ARRAY);
+          Polymer.Base.async(function() {
+            assert.isTrue(selectController.getElement().isAttached);
+          }, 100);
+        });
+
+        test('add select controller (object type parameter)', function() {
+          selectController = paperGUI.add(testObj, 'select', OPTIONS_OBJECT);
+          Polymer.Base.async(function() {
+            assert.isTrue(selectController.getElement().isAttached);
+          }, 100);
+        });
+
+        test('value change updates linked object value (array type parameter)', function(done) {
+          selectController = paperGUI.add(testObj, 'select', OPTIONS_ARRAY);
+          Polymer.Base.async(function() {
+            paperGUI.open();
+            // Reach out to the paper-listbox element and select the next item.
+            Polymer.dom(selectController.getElement()).firstChild.selectNext();
+            Polymer.Base.async(function() {
+              assert.equal(testObj['select'], OPTIONS_ARRAY[1]);
+              done();
+            }, 300);
+          }, 300);
+        });
+
+        test('value change updates linked object value (object type parameter)', function(done) {
+          selectController = paperGUI.add(testObj, 'select', OPTIONS_OBJECT);
+          Polymer.Base.async(function() {
+            paperGUI.open();
+            // Reach out to the paper-listbox element and select the next item.
+            Polymer.dom(selectController.getElement()).firstChild.selectNext();
+            Polymer.Base.async(function() {
+              assert.equal(testObj['select'], OPTIONS_ARRAY[1]);
+              done();
+            }, 300);
+          }, 300);
+        });
+
+        test('value change calls the custom callback and passes the new value', function(done) {
+          selectController = paperGUI.add(testObj, 'select', OPTIONS_ARRAY);
+          Polymer.Base.async(function() {
+            selectController.onChange(function(val) {
+              assert.equal(val, OPTIONS_ARRAY[1]);
+              done();
+            });
+            // Reach out to the paper-listbox element and select the next item.
+            Polymer.dom(selectController.getElement()).firstChild.selectNext();
+          }, 300);
+        });
+
+        test('default label check', function(done) {
+          selectController = paperGUI.add(testObj, 'select', OPTIONS_ARRAY);
+          Polymer.Base.async(function() {
+            assert.equal(selectController.getElement().label, 'select');
+            done();
+          }, 100);
+        });
+
+        test('add custom label', function(done) {
+          selectController = paperGUI.add(testObj, 'select', OPTIONS_ARRAY);
+          var CUSTOM_LABEL = 'Custom Select label';
+          selectController.name(CUSTOM_LABEL);
+          Polymer.Base.async(function() {
+            assert.equal(selectController.getElement().label,
+                CUSTOM_LABEL);
+            done();
+          }, 100);
+        });
+
+      });
+
+      </script>
+
+</body>
+</html>

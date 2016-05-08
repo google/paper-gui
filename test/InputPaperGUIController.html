@@ -1,0 +1,113 @@
+<!-- Copyright 2016 Google Inc. All rights reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// -->
+<!doctype html>
+
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>PaperGUI tests - InputPaperGUIController</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../bower_components/web-component-tester/browser.js"></script>
+  <script src="../bower_components/iron-test-helpers/mock-interactions.js"></script>
+
+  <link rel="import" href="../dist/paper-gui.html">
+
+</head>
+<body>
+
+  <script>
+
+      suite('InputPaperGUIController (string property)', function() {
+
+        var paperGUI;
+        var inputController;
+        var NEW_VALUE = 'new value';
+
+        setup(function() {
+          paperGUI = new PaperGUI();
+          testObj = {
+            'str': 'original value'
+          };
+          inputController = paperGUI.add(testObj, 'str');
+        });
+
+        teardown(function() {
+          document.querySelector('paper-gui').remove();
+          paperGUI = null;
+          inputController = null;
+        });
+
+        test('add input controller', function() {
+          Polymer.Base.async(function() {
+            assert.isTrue(inputController.getElement().isAttached);
+          }, 100);
+        });
+
+        test('value change updates linked object value', function(done) {
+          Polymer.Base.async(function() {
+            paperGUI.open();
+            var inputEl = inputController.getElement();
+            inputEl.value = NEW_VALUE;
+            Polymer.Base.fire('change', {}, {
+              bubbles: false,
+              node: inputEl
+            });
+            Polymer.Base.async(function() {
+              assert.equal(testObj['str'], NEW_VALUE);
+              done();
+            }, 300);
+          }, 300);
+        });
+
+        test('value change calls the custom callback and passes the new value', function(done) {
+          Polymer.Base.async(function() {
+            inputController.onChange(function(val) {
+              assert.equal(val, NEW_VALUE);
+              done();
+            });
+            var inputEl = inputController.getElement();
+            inputEl.value = NEW_VALUE;
+            Polymer.Base.fire('change', {}, {
+              bubbles: false,
+              node: inputEl
+            });
+          }, 300);
+        });
+
+        test('default label check', function(done) {
+          Polymer.Base.async(function() {
+            assert.equal(inputController.getElement().label, 'str');
+            done();
+          }, 100);
+        });
+
+        test('add custom label', function(done) {
+          var CUSTOM_LABEL = 'Custom Input';
+          inputController.name(CUSTOM_LABEL);
+          Polymer.Base.async(function() {
+            assert.equal(inputController.getElement().label,
+                CUSTOM_LABEL);
+            done();
+          }, 100);
+        });
+
+      });
+
+      </script>
+
+</body>
+</html>

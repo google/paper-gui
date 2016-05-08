@@ -1,0 +1,198 @@
+<!--
+@license 
+Copyright 2016 Google Inc. All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-iconset-svg/iron-iconset-svg.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-slider/paper-slider.html">
+<link rel="import" href="../bower_components/paper-styles/typography.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
+
+<dom-module id="paper-gui">
+
+  <style>
+    :host {
+      --dark-primary-color:       #FFA000;
+      --light-primary-color:      #FFECB3;
+      --text-primary-color:       #FAFAFA; /**/
+      --accent-color:             #FFC107;
+      --primary-background-color: #424242; /**/
+      --primary-color:            #FFC107;
+      --primary-text-color:       #FAFAFA;
+      --secondary-text-color:     #424242;
+      --disabled-text-color:      #BDBDBD;
+      --divider-color:            #B6B6B6;
+
+      /* paper-input */
+      --paper-input-container-color:       rgba(255, 255, 255, 0.64);
+      --paper-input-container-focus-color: var(--primary-color);
+      --paper-input-container-input-color: #FAFAFA;
+
+      /* paper-slider */
+      --paper-slider-active-color: var(--primary-color);
+      --paper-slider-knob-color: var(--primary-color);
+      --paper-slider-secondary-color: #B6B6B6;
+
+      @apply(--paper-font-common-base);
+    }
+
+    /* Note: /deep/ and ::shadow are both deprecated and will cause a warning in Chrome's console.
+     * However unfortunately we can't access these scrollbars any other way at the moment.
+     * TODO: Fix this whenever possible.
+     */
+    paper-dropdown-menu::shadow /deep/ ::-webkit-scrollbar-track,
+    paper-dialog-scrollable::shadow ::-webkit-scrollbar-track {
+      background: var(--primary-background-color);
+    }
+
+    paper-dropdown-menu::shadow /deep/ ::-webkit-scrollbar,
+    paper-dialog-scrollable::shadow ::-webkit-scrollbar {
+      width: 16px;
+    }
+
+    paper-dropdown-menu::shadow /deep/ ::-webkit-scrollbar-thumb,
+    paper-dialog-scrollable::shadow ::-webkit-scrollbar-thumb {
+      background-color: #A08124;
+      border: 4px solid var(--primary-background-color);
+      border-radius: 50px;
+    }
+
+    paper-dropdown-menu::shadow /deep/ ::-webkit-scrollbar-thumb:hover,
+    paper-dialog-scrollable::shadow ::-webkit-scrollbar-thumb:hover {
+      background-color: var(--primary-color);
+    }
+
+    paper-item {
+      @apply(--layout);
+    }
+
+    paper-input {
+      font-size: 16px;
+    }
+
+    #controllers paper-button,
+    #controllers paper-input,
+    #controllers paper-toggle-button {
+      margin: 5px 0;
+    }
+
+    #controllers > div {
+      margin-top: 5px;
+    }
+
+    #controllers paper-dropdown-menu {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
+    #controllers paper-button,
+    #controllers paper-input,
+    #controllers paper-slider {
+      width: 100%;
+    }
+
+    #dialog {
+      position: fixed;
+      top: 16px;
+      right: 0;
+      width: 300px;
+    }
+
+    #fab {
+      position: fixed;
+      top: 50px;
+      right: 50px;
+      background-color: #424242;
+      color: var(--primary-color);
+    }
+
+    .buttons {
+      @apply(--layout);
+    }
+
+    #controllers paper-button {
+      background-color: #616161;
+    }
+  </style>
+
+  <template>
+    <!-- Avoid loading the full iron-icons iconset -->
+    <iron-iconset-svg name="mini-iconset" size="24">
+      <svg>
+        <defs>
+          <g id="create">
+            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+          </g>
+        </defs>
+      </svg>
+    </iron-iconset-svg>
+    <paper-dialog no-cancel-on-outside-click="true" entry-animation="scale-up-animation"
+        exit-animation="fade-out-animation" id="dialog">
+      <paper-dialog-scrollable id="controllers"></paper-dialog-scrollable>
+      <div class="buttons">
+        <paper-button dialog-dismiss>Close</paper-button>
+      </div>
+    </paper-dialog>
+    <paper-fab id="fab" icon="mini-iconset:create" title="Toggle GUI"></paper-fab>
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'paper-gui',
+
+    listeners: {
+      'fab.click': 'toggleDialog'
+    },
+
+    /**
+     * @param {!Element} element
+     */
+    appendController: function(element) {
+      Polymer.dom(this.$.controllers).appendChild(element);
+    },
+
+    toggleDialog: function() {
+      this.$.dialog.toggle();
+    },
+
+    open: function() {
+      this.$.dialog.open();
+    },
+
+    close: function() {
+      this.$.dialog.close();
+    }
+
+  });
+
+</script>
+
+<script src="../build/lib.js"></script>
