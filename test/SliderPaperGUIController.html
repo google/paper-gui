@@ -1,0 +1,173 @@
+<!-- Copyright 2016 Google Inc. All rights reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// -->
+<!doctype html>
+
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>PaperGUI tests - SliderPaperGUIController</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../bower_components/web-component-tester/browser.js"></script>
+  <script src="../bower_components/iron-test-helpers/mock-interactions.js"></script>
+
+  <link rel="import" href="../dist/paper-gui.html">
+
+</head>
+<body>
+
+  <script>
+
+      suite('SliderPaperGUIController (number property)', function() {
+
+        var paperGUI;
+        var sliderController;
+        var CUSTOM_LABEL = 'Custom Slider';
+        var INITIAL_VALUE = 500; // Higher than default max (100).
+        var INITIAL_MIN_VALUE = -10;
+        var NEW_MIN_VALUE = 42;
+        var INITIAL_MAX_VALUE = 1000;
+        var NEW_MAX_VALUE = 99;
+
+        setup(function() {
+          paperGUI = new PaperGUI();
+          testObj = {
+            'nber': INITIAL_VALUE
+          };
+          sliderController = paperGUI.add(testObj, 'nber', INITIAL_MIN_VALUE, INITIAL_MAX_VALUE);
+        });
+
+        teardown(function() {
+          document.querySelector('paper-gui').remove();
+          paperGUI = null;
+          sliderController = null;
+        });
+
+        test('add slider controller', function(done) {
+          Polymer.Base.async(function() {
+            var el = sliderController.getElement();
+            assert.isNotNull(el);
+            done();
+          });
+        });
+
+        test('check initial, max and min values', function() {
+          var sliderEl = sliderController.getElement().children[1];
+          expect(sliderEl.value).to.be.equal(INITIAL_VALUE);
+          expect(sliderEl.min).to.be.equal(INITIAL_MIN_VALUE);
+          expect(sliderEl.max).to.be.equal(INITIAL_MAX_VALUE);
+        });
+
+        test('value change updates linked object value', function(done) {
+          var NEW_VALUE = 99;
+          Polymer.Base.async(function() {
+            paperGUI.open();
+            var sliderEl = sliderController.getElement().children[1];
+            sliderEl.value = NEW_VALUE;
+            Polymer.Base.fire('change', {}, {
+              bubbles: false,
+              node: sliderEl
+            });
+            Polymer.Base.async(function() {
+              expect(testObj['nber']).to.be.equal(NEW_VALUE);
+              done();
+            }, 100);
+          }, 100);
+        });
+
+        test('value change calls the custom callback', function(done) {
+          sliderController.onChange(function(){ done(); });
+          paperGUI.open();
+          Polymer.Base.fire('change', {}, {
+            bubbles: false,
+            node: sliderController.getElement().children[1]
+          }, 100);
+        });
+
+        test('default label check', function() {
+          expect(sliderController.getElement().firstChild.innerText).to.be
+          .equal('nber');
+        });
+
+        test('add custom label', function(done) {
+          sliderController.name(CUSTOM_LABEL);
+          Polymer.Base.async(function() {
+            assert.equal(sliderController.getElement().firstChild.innerText,
+                CUSTOM_LABEL);
+            done();
+          });
+        });
+
+        test('set min value', function(done) {
+          sliderController.min(NEW_MIN_VALUE);
+          Polymer.Base.async(function() {
+            assert.equal(sliderController.getElement().children[1].min,
+                NEW_MIN_VALUE);
+            done();
+          });
+        });
+
+        test('set max value', function(done) {
+          sliderController.max(NEW_MAX_VALUE);
+          Polymer.Base.async(function() {
+            assert.equal(sliderController.getElement().children[1].max,
+                NEW_MAX_VALUE);
+            done();
+          });
+        });
+
+        test('set step value', function(done) {
+          var STEP = 2.1;
+          sliderController.step(STEP);
+          Polymer.Base.async(function() {
+            assert.equal(sliderController.getElement().children[1].step,
+                STEP);
+            done();
+          });
+        });
+
+        test('set invalid max value', function(done) {
+          sliderController.max('not a number');
+          Polymer.Base.async(function() {
+            assert.equal(sliderController.getElement().children[1].max,
+                INITIAL_MAX_VALUE);
+            done();
+          });
+        });
+
+        test('set invalid min value', function(done) {
+          sliderController.min('not a number');
+          Polymer.Base.async(function() {
+            assert.equal(sliderController.getElement().children[1].min,
+                INITIAL_MIN_VALUE);
+            done();
+          });
+        });
+
+        test('set invalid step value', function(done) {
+          sliderController.step('not a number');
+          Polymer.Base.async(function() {
+            assert.equal(sliderController.getElement().children[1].step, 1);
+            done();
+          });
+        });
+
+      });
+
+      </script>
+
+</body>
+</html>

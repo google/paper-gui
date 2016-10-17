@@ -33,18 +33,19 @@ export default class SliderPaperGUIController extends AbstractPaperGUIController
     this.labelEl_ = document.createElement('label');
     this.el_.appendChild(this.labelEl_);
     this.sliderEl_ = document.createElement('paper-slider');
-    this.sliderEl_.value = object[propertyName];
     this.sliderEl_.editable = true;
     this.sliderEl_.addEventListener('change', evt => {
       object[propertyName] = evt.target.value;
       this.changeCallback_(evt.target.value);
     });
+    // Set max and min prior to setting the value.
     if (typeof opt_args[2] == 'number') {
       this.min(opt_args[2]);
       if (typeof opt_args[3] == 'number') {
         this.max(opt_args[3]);
       }
     }
+    this.sliderEl_.value = object[propertyName];
 
     this.el_.appendChild(this.sliderEl_);
   }
@@ -55,18 +56,24 @@ export default class SliderPaperGUIController extends AbstractPaperGUIController
     return this;
   }
 
-  max(number = 100) {
-    this.sliderEl_.max = number;
+  max(num = 100) {
+    if (typeof num == 'number') {
+      this.sliderEl_.max = num;
+    }
     return this;
   }
 
-  min(number = 0) {
-    this.sliderEl_.min = number;
+  min(num = 0) {
+    if (typeof num == 'number') {
+      this.sliderEl_.min = num;
+    }
     return this;
   }
 
-  step(number = 1) {
-    this.sliderEl_.step = number;
+  step(num = 1) {
+    if (typeof num == 'number') {
+      this.sliderEl_.step = num;
+    }
     return this;
   }
 }
