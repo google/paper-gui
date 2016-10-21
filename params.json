@@ -1,0 +1,6 @@
+{
+  "name": "Paper-gui",
+  "tagline": "A clone of dat.GUI using nice Polymer paper elements.",
+  "body": "# PaperGUI\r\n\r\nA clone of [dat.GUI](https://github.com/dataarts/dat.gui) using nice\r\n[Polymer](https://www.polymer-project.org/1.0/docs/) paper elements.\r\n\r\n## Install\r\n\r\nBuilding requires node, gulp and bower.\r\n\r\n`npm install gulp bower`\r\n\r\n`npm install`\r\n\r\n`npm run-script build`\r\n\r\nThe `dist` folder contains the build. The `paper-gui.html` file is the only one\r\nyou need if you want to use webcomponent-style, synchronous import.\r\nOtherwise, you'll need all 3 files in the `dist` folder as `paperGUI.js` loads\r\nthe other two.\r\n\r\nTo try out the demo, run a webserver in the papergui root folder, eg:\r\n\r\n`python -m SimpleHTTPServer 8000`\r\n\r\nthen open http://localhost:8000/demo.html in a browser.\r\n\r\n## TODO\r\n\r\n- Improve documentation & demo\r\n- Increase test coverage\r\n- Add folders/tabs structure capability\r\n\r\n## Known issues\r\n\r\n- Select box change callback fires on controller creation (intended?)\r\n",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
