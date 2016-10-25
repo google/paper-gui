@@ -36,7 +36,7 @@ npm run-script build
 </code></pre>
 
 <p>The <code>dist</code> folder contains the build. The <code>paper-gui.html</code> file is the only one
-you need if you want to use webcomponent-style, synchronous import.
+you need if you want to use web component-style, synchronous import.
 Otherwise, you'll need all 3 files in the <code>dist</code> folder as <code>paperGUI.js</code> loads
 the other two.</p>
 
@@ -84,6 +84,17 @@ the other two.</p>
 <li>PaperGUI determines controller type based on a property's initial value</li>
 <li>Press H to show/hide all GUI's.</li>
 </ul>
+
+<h5>
+<a id="importing-papergui-as-a-web-component" class="anchor" href="#importing-papergui-as-a-web-component" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Importing PaperGUI as a web component</h5>
+
+<p>As shown above, the <code>paperGUI.js</code> script loads a polyfill and then imports the web components necessary for the PaperGUI library to work. Once it's all set, it triggers a <code>PaperGUIReady</code> event. This allows to delay the loading of PaperGUI as much as possible.</p>
+
+<p>Alternatively, you can skip the loader script call and use a (blocking) import directly. Add this at the top of your HTML:</p>
+
+<div class="highlight highlight-text-html-basic"><pre>&lt;<span class="pl-ent">link</span> <span class="pl-e">rel</span>=<span class="pl-s"><span class="pl-pds">"</span>import<span class="pl-pds">"</span></span> <span class="pl-e">href</span>=<span class="pl-s"><span class="pl-pds">"</span>dist/paper-gui.html<span class="pl-pds">"</span></span>&gt;</pre></div>
+
+<p>Note that in this case no <code>PaperGUIReady</code> event will be triggered, and the import will only work on web component-ready browsers as this bypasses support detection and polyfill loading.</p>
 
 <h3>
 <a id="constrain" class="anchor" href="#constrain" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Constrain</h3>
@@ -228,6 +239,68 @@ the other two.</p>
 <a id="reference" class="anchor" href="#reference" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Reference</h2>
 
 <h3>
+<a id="papergui-constructor-parameters" class="anchor" href="#papergui-constructor-parameters" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>PaperGUI constructor parameters</h3>
+
+<p>The PaperGUI constructor can accept an object containing various options (eg. <code>var gui = new PaperGUI({autoPlace: false});</code>)</p>
+
+<table>
+<thead>
+<tr>
+<th>Property name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>autoPlace</code></td>
+<td>Boolean</td>
+<td>Whether to automatically append the PaperGUI element to the DOM as soon as at least one controller has been added. Default is <strong>true</strong>.</td>
+</tr>
+</tbody>
+</table>
+
+<h3>
+<a id="papergui-methods" class="anchor" href="#papergui-methods" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>PaperGUI methods</h3>
+
+<p>PaperGUI has several methods.</p>
+
+<table>
+<thead>
+<tr>
+<th>Method name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>add()</code></td>
+<td>Creates and returns a new UI controller (controller type varies depending on the arguments, see next section).</td>
+</tr>
+<tr>
+<td><code>el()</code></td>
+<td>Returns the main Element for this PaperGUI (ie a <code>paper-gui</code> component). Useful for attaching it to the DOM manually when <code>autoPlace</code> is disabled.</td>
+</tr>
+<tr>
+<td><code>open()</code></td>
+<td>Opens the dialog containing the controllers. Equivalent to clicking the edit button.</td>
+</tr>
+<tr>
+<td><code>close()</code></td>
+<td>Closes the dialog containing the controllers. Equivalent to clicking the close button in the dialog.</td>
+</tr>
+<tr>
+<td><code>hide()</code></td>
+<td>Hides all PaperGUI elements (edit button, dialog with controllers). Equivalent to pressing the 'H' key.</td>
+</tr>
+<tr>
+<td><code>show()</code></td>
+<td>Shows all previously hidden PaperGUI elements.</td>
+</tr>
+</tbody>
+</table>
+
+<h3>
 <a id="controller-types" class="anchor" href="#controller-types" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Controller types</h3>
 
 <p>Here's a summary of the controller types PaperGUI currently supports:</p>
@@ -292,27 +365,27 @@ the other two.</p>
 </thead>
 <tbody>
 <tr>
-<td>name(labelString)</td>
+<td><code>name(labelString)</code></td>
 <td>Defines the label or placeholder text for the controller</td>
 <td>All</td>
 </tr>
 <tr>
-<td>onChange(callbackFunction)</td>
+<td><code>onChange(callbackFunction)</code></td>
 <td>Calls the function when the value changes</td>
 <td>All except Button</td>
 </tr>
 <tr>
-<td>min(minNumber)</td>
+<td><code>min(minNumber)</code></td>
 <td>Sets the minimum authorized value</td>
 <td>Slider</td>
 </tr>
 <tr>
-<td>max(minNumber)</td>
+<td><code>max(minNumber)</code></td>
 <td>Sets the maximum authorized value</td>
 <td>Slider</td>
 </tr>
 <tr>
-<td>step(stepNumber)</td>
+<td><code>step(stepNumber)</code></td>
 <td>Sets the step size</td>
 <td>Slider</td>
 </tr>
