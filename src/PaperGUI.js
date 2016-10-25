@@ -18,12 +18,15 @@ import InputPaperGUIController from './InputPaperGUIController';
 import SelectPaperGUIController from './SelectPaperGUIController';
 import SliderPaperGUIController from './SliderPaperGUIController';
 import TogglePaperGUIController from './TogglePaperGUIController';
+import TextPaperGUIController from './TextPaperGUIController';
 
 export default class PaperGUI {
-  constructor() {
+  constructor(options) {
+    options = options || {};
     this.rootEl_ = document.createElement('paper-gui');
     this.controllers_ = [];
-
+    this.autoPlace_ =
+        options['autoPlace'] == undefined ? true : options['autoPlace'];
     // Use the 'h' key to toggle the gui completely.
     document.body.addEventListener('keydown', evt => {
       if (evt.target == document.body && (evt.which || evt.keyCode) == 72) {
@@ -40,7 +43,7 @@ export default class PaperGUI {
     }
     let controller = this._controllerFactory(object, propName, args);
     this._append(controller.getElement());
-    if (!this.rootEl_.isAttached) {
+    if (!this.rootEl_.isAttached && this.autoPlace_) {
       document.body.appendChild(this.rootEl_);
     }
     this.controllers_.push(controller);
@@ -61,6 +64,10 @@ export default class PaperGUI {
 
   show() {
     this.rootEl_.hidden = false;
+  }
+
+  el() {
+    return this.rootEl_;
   }
 
   _controllerFactory(object, propName, args) {

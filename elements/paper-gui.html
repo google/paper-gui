@@ -36,26 +36,36 @@ limitations under the License.
 
   <style>
     :host {
-      --dark-primary-color:       #FFA000;
-      --light-primary-color:      #FFECB3;
-      --text-primary-color:       #FAFAFA; /**/
-      --accent-color:             #FFC107;
-      --primary-background-color: #424242; /**/
-      --primary-color:            #FFC107;
-      --primary-text-color:       #FAFAFA;
-      --secondary-text-color:     #424242;
-      --disabled-text-color:      #BDBDBD;
-      --divider-color:            #B6B6B6;
+      --pg-text-color:                var(--paper-gui-text-color, #fafafa);
+      --pg-background-color:          var(--paper-gui-background-color, #424242);
+      --pg-accent-color:              var(--paper-gui-accent-color, #ff8507);
+      --pg-ui-color:                  var(--paper-gui-ui-color, rgba(255, 255, 255, 0.6));
+      --pg-ui-secondary-color:        var(--paper-gui-ui-secondary-color, rgba(255, 255, 255, 0.2));
+      --pg-ui-accent-contrast-color:  var(--paper-gui-accent-contrast-color, white);
+      --text-primary-color:           var(--pg-text-color);
+      --accent-color:                 var(--pg-accent-color);
+      --primary-background-color:     var(--pg-background-color);
+      --primary-color:                var(--pg-accent-color);
+      --primary-text-color:           var(--pg-text-color);
+      --secondary-text-color:         var(--main-background-color);
+      --disabled-text-color:          var(--pg-ui-secondary-color);
+      --divider-color:                var(--pg-ui-secondary-color);
 
       /* paper-input */
-      --paper-input-container-color:       rgba(255, 255, 255, 0.64);
-      --paper-input-container-focus-color: var(--primary-color);
-      --paper-input-container-input-color: #FAFAFA;
+      --paper-input-container-color:       var(--pg-ui-color);
+      --paper-input-container-focus-color: var(--pg-accent-color);
+      --paper-input-container-input-color: var(--pg-text-color);
 
       /* paper-slider */
-      --paper-slider-active-color: var(--primary-color);
-      --paper-slider-knob-color: var(--primary-color);
-      --paper-slider-secondary-color: #B6B6B6;
+      --paper-slider-active-color: var(--pg-accent-color);
+      --paper-slider-container-color: var(--pg-ui-color);
+      --paper-slider-knob-color: var(--pg-accent-color);
+      --paper-slider-secondary-color: var(--pg-ui-secondary-color);
+
+      /* paper-dropdown-menu */
+      --paper-dropdown-menu-icon: {
+        color: var(--pg-ui-color);
+      }
 
       @apply(--paper-font-common-base);
     }
@@ -76,14 +86,18 @@ limitations under the License.
 
     paper-dropdown-menu::shadow /deep/ ::-webkit-scrollbar-thumb,
     paper-dialog-scrollable::shadow ::-webkit-scrollbar-thumb {
-      background-color: #A08124;
-      border: 4px solid var(--primary-background-color);
+      background-color: var(--pg-ui-secondary-color);
+      border: 4px solid var(--pg-background-color);
       border-radius: 50px;
     }
 
     paper-dropdown-menu::shadow /deep/ ::-webkit-scrollbar-thumb:hover,
     paper-dialog-scrollable::shadow ::-webkit-scrollbar-thumb:hover {
-      background-color: var(--primary-color);
+      background-color: var(--pg-ui-color);
+    }
+
+    paper-slider::shadow paper-input.slider-input {
+      width: auto;
     }
 
     paper-item {
@@ -94,14 +108,19 @@ limitations under the License.
       font-size: 16px;
     }
 
+
     #controllers paper-button,
     #controllers paper-input,
     #controllers paper-toggle-button {
-      margin: 5px 0;
+      margin: 8px 0;
+    }
+
+    #controllers paper-button {
+      margin-right: 10px;
     }
 
     #controllers > div {
-      margin-top: 5px;
+      margin-top: 8px;
     }
 
     #controllers paper-dropdown-menu {
@@ -109,14 +128,26 @@ limitations under the License.
       overflow-x: hidden;
     }
 
-    #controllers paper-button,
-    #controllers paper-input,
-    #controllers paper-slider {
+    #controllers paper-dropdown-menu,
+    #controllers paper-input {
       width: 100%;
     }
 
-    #controllers paper-input .slider-input {
-      width: auto;
+    #controllers label {
+      position: relative;
+      bottom: -6px;
+    }
+
+    #controllers paper-button {
+      --paper-button : {
+        color: var(--pg-ui-accent-contrast-color);
+        background-color: var(--pg-accent-color);
+      };
+    }
+
+    #controllers paper-slider {
+      margin-left: -8px;
+      width: calc(100% + 8px);
     }
 
     #dialog {
@@ -124,36 +155,24 @@ limitations under the License.
       top: 16px;
       right: 0;
       width: 300px;
+      @apply(--paper-gui-dialog);
     }
 
     #fab {
       position: fixed;
       top: 50px;
       right: 50px;
-      background-color: #424242;
-      color: var(--primary-color);
+      background-color: var(--pg-accent-color);
+      color: var(--pg-ui-accent-contrast-color);
+      @apply(--paper-gui-edit-button);
     }
 
     .buttons {
       @apply(--layout);
     }
-
-    #controllers paper-button {
-      background-color: #616161;
-    }
   </style>
 
   <template>
-    <!-- Avoid loading the full iron-icons iconset -->
-    <iron-iconset-svg name="mini-iconset" size="24">
-      <svg>
-        <defs>
-          <g id="create">
-            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
-          </g>
-        </defs>
-      </svg>
-    </iron-iconset-svg>
     <paper-dialog no-cancel-on-outside-click="true" entry-animation="scale-up-animation"
         exit-animation="fade-out-animation" id="dialog">
       <paper-dialog-scrollable id="controllers"></paper-dialog-scrollable>
@@ -161,7 +180,18 @@ limitations under the License.
         <paper-button dialog-dismiss>Close</paper-button>
       </div>
     </paper-dialog>
-    <paper-fab id="fab" icon="mini-iconset:create" title="Toggle GUI"></paper-fab>
+    <paper-fab id="fab" icon="mini-iconset:create" title="Toggle GUI">
+      <!-- Avoid loading the full iron-icons iconset -->
+      <iron-iconset-svg name="mini-iconset" size="24">
+        <svg>
+          <defs>
+            <g id="create">
+              <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+            </g>
+          </defs>
+        </svg>
+      </iron-iconset-svg>
+    </paper-fab>
   </template>
 
 </dom-module>

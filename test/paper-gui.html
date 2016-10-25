@@ -184,6 +184,10 @@
           assert.isFalse(paperGUIEl.hidden);
         });
 
+        test('el()', function() {
+          assert.isTrue(paperGUI.el() == paperGUIEl);
+        });
+
         test('h key shortcut', function(done) {
           MockInteractions.pressAndReleaseKeyOn(document.body, HIDE_DIALOG_SHORTCUT_KEYCODE);
           Polymer.Base.async(function() {
