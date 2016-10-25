@@ -15,7 +15,7 @@ npm install
 npm run-script build
 ```
 The `dist` folder contains the build. The `paper-gui.html` file is the only one
-you need if you want to use webcomponent-style, synchronous import.
+you need if you want to use web component-style, synchronous import.
 Otherwise, you'll need all 3 files in the `dist` folder as `paperGUI.js` loads
 the other two.
 
@@ -59,10 +59,22 @@ document.addEventListener('PaperGUIReady', function(e) {
 <!-- Load the PaperGUI library and polyfills -->
 <script type="text/javascript" src="dist/paperGUI.js"></script>
 ```
+
 - The property must be public, i.e. defined by `this.prop = value`
 - PaperGUI determines controller type based on a property's initial value
 - Press H to show/hide all GUI's.
 
+##### Importing PaperGUI as a web component
+
+As shown above, the `paperGUI.js` script loads a polyfill and then imports the web components necessary for the PaperGUI library to work. Once it's all set, it triggers a `PaperGUIReady` event. This allows to delay the loading of PaperGUI as much as possible.
+
+Alternatively, you can skip the loader script call and use a (blocking) import directly. Add this at the top of your HTML:
+
+```html
+<link rel="import" href="dist/paper-gui.html">
+```
+
+Note that in this case no `PaperGUIReady` event will be triggered, and the import will only work on web component-ready browsers as this bypasses support detection and polyfill loading.
 
 ### Constrain
 
@@ -183,6 +195,31 @@ In your main html file:
 
 ## Reference
 
+
+### PaperGUI constructor parameters
+
+The PaperGUI constructor can accept an object containing various options (eg. `var gui = new PaperGUI({autoPlace: false});`)
+
+| Property name | Type    | Description |
+|---------------|---------|-------------|
+| `autoPlace`   | Boolean | Whether to automatically append the PaperGUI element to the DOM as soon as at least one controller has been added. Default is **true**. |
+
+
+### PaperGUI methods
+
+PaperGUI has several methods.
+
+| Method name | Description |
+|-------------|-------------|
+| `add()`     | Creates and returns a new UI controller (controller type varies depending on the arguments, see next section). |
+| `el()`      | Returns the main Element for this PaperGUI (ie a `paper-gui` component). Useful for attaching it to the DOM manually when `autoPlace` is disabled. |
+| `open()`    | Opens the dialog containing the controllers. Equivalent to clicking the edit button. |
+| `close()`   | Closes the dialog containing the controllers. Equivalent to clicking the close button in the dialog. |
+| `hide()`    | Hides all PaperGUI elements (edit button, dialog with controllers). Equivalent to pressing the 'H' key. |
+| `show()`    | Shows all previously hidden PaperGUI elements. |
+
+
+
 ### Controller types
 
 Here's a summary of the controller types PaperGUI currently supports:
@@ -204,14 +241,13 @@ Here's a summary of the controller types PaperGUI currently supports:
 All controller methods return themselves, allowing to chain method calls. Here is a list of methods.
 
 
-| Method                     | Description                                              | Controller types  |
-|----------------------------|----------------------------------------------------------|-------------------|
-| name(labelString)          | Defines the label or placeholder text for the controller | All               |
-| onChange(callbackFunction) | Calls the function when the value changes                | All except Button |
-| min(minNumber)             | Sets the minimum authorized value                        | Slider            |
-| max(minNumber)             | Sets the maximum authorized value                        | Slider            |
-| step(stepNumber)           | Sets the step size                                       | Slider            |
-
+| Method                       | Description                                              | Controller types  |
+|------------------------------|----------------------------------------------------------|-------------------|
+| `name(labelString)`          | Defines the label or placeholder text for the controller | All               |
+| `onChange(callbackFunction)` | Calls the function when the value changes                | All except Button |
+| `min(minNumber)`             | Sets the minimum authorized value                        | Slider            |
+| `max(minNumber)`             | Sets the maximum authorized value                        | Slider            |
+| `step(stepNumber)`           | Sets the step size                                       | Slider            |
 
 
 ## TODO
