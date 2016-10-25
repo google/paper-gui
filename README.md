@@ -1,15 +1,11 @@
 # PaperGUI
 
 
-
-
 A clone of [dat.GUI](https://github.com/dataarts/dat.gui) using nice
 [Polymer (1.0)](https://www.polymer-project.org/1.0/docs/) paper elements. One of the advantages is that this makes it touch and mobile friendly. The API is intentionally similar, although not all features have been ported to PaperGUI.
 
 
 ## Install
-
-
 
 
 Building requires node, gulp and bower.
@@ -24,8 +20,6 @@ Otherwise, you'll need all 3 files in the `dist` folder as `paperGUI.js` loads
 the other two.
 
 
-
-
 To try out the demo, run a webserver in the papergui root folder, eg:
 ```python
 python -m SimpleHTTPServer 8000
@@ -33,16 +27,10 @@ python -m SimpleHTTPServer 8000
 Then open http://localhost:8000/demo.html in a browser.
 
 
-
-
 ## Usage
 
 
-
-
 ### Basic usage
-
-
 
 
 With very little code, PaperGUI creates an interface that you can use to modify variables, exactly like [dat.GUI](https://workshop.chromeexperiments.com/examples/gui/#1--Basic-Usage) from which the below example is adapted.
@@ -56,9 +44,6 @@ var FizzyText = function() {
   // Define render logic ...
 };
 
-
-
-
 /* Polymer elements are loaded asynchronously, we need to wait for
  * everything to be ready before creating the GUI. */
 document.addEventListener('PaperGUIReady', function(e) {
@@ -70,9 +55,6 @@ document.addEventListener('PaperGUIReady', function(e) {
   gui.add(text, 'explode');
 };
 </script>
-
-
-
 
 <!-- Load the PaperGUI library and polyfills -->
 <script type="text/javascript" src="dist/paperGUI.js"></script>
@@ -124,8 +106,6 @@ Note: the `onFinishChange` handler [from dat.GUI](https://workshop.chromeexperim
 
 
 ## Styling & positioning
-
-
 
 
 PaperGUI exposes custom CSS properties and mixins (see [Polymer documentation](https://www.polymer-project.org/1.0/docs/devguide/styling#custom-css-properties)) through which you can change the colors and style of the UI.
@@ -201,7 +181,6 @@ In your main html file:
 ```
 
 
-
 ## Reference
 
 ### Controller types
@@ -232,7 +211,6 @@ All controller methods return themselves, allowing to chain method calls. Here i
 | min(minNumber)             | Sets the minimum authorized value                        | Slider            |
 | max(minNumber)             | Sets the maximum authorized value                        | Slider            |
 | step(stepNumber)           | Sets the step size                                       | Slider            |
-
 
 
 
