@@ -1,49 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-us">
   <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <meta charset="UTF-8">
+    <title>PaperGUI by google</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
-
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-    <title>Paper-gui by google</title>
   </head>
-
   <body>
-    <header>
-      <div class="inner">
-        <h1>Paper-gui</h1>
-        <h2>A clone of dat.GUI using nice Polymer paper elements.</h2>
-        <a href="https://github.com/google/paper-gui" class="button"><small>View project on</small> GitHub</a>
-      </div>
-    </header>
+    <section class="page-header">
+      <h1 class="project-name">PaperGUI</h1>
+      <h2 class="project-tagline">A clone of dat.GUI using nice Polymer paper elements.</h2>
+      <a href="https://github.com/google/paper-gui" class="btn">View on GitHub</a>
+      <a href="https://github.com/google/paper-gui/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/google/paper-gui/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-    <div id="content-wrapper">
-      <div class="inner clearfix">
-        <section id="main-content">
-          <h1>
+    <section class="main-content">
+      <h1>
 <a id="papergui" class="anchor" href="#papergui" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>PaperGUI</h1>
 
 <p>A clone of <a href="https://github.com/dataarts/dat.gui">dat.GUI</a> using nice
-<a href="https://www.polymer-project.org/1.0/docs/">Polymer</a> paper elements.</p>
+<a href="https://www.polymer-project.org/1.0/docs/">Polymer (1.0)</a> paper elements. One of the advantages is that this makes it touch and mobile friendly. The API is intentionally similar, although not all features have been ported to PaperGUI.</p>
 
 <h2>
 <a id="install" class="anchor" href="#install" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Install</h2>
 
 <p>Building requires node, gulp and bower.</p>
 
-<p><code>npm install gulp bower</code></p>
-
-<p><code>npm install</code></p>
-
-<p><code>npm run-script build</code></p>
+<pre><code>npm install gulp bower
+npm install
+npm run-script build
+</code></pre>
 
 <p>The <code>dist</code> folder contains the build. The <code>paper-gui.html</code> file is the only one
 you need if you want to use webcomponent-style, synchronous import.
@@ -52,17 +42,289 @@ the other two.</p>
 
 <p>To try out the demo, run a webserver in the papergui root folder, eg:</p>
 
-<p><code>python -m SimpleHTTPServer 8000</code></p>
+<div class="highlight highlight-source-python"><pre>python <span class="pl-k">-</span>m SimpleHTTPServer <span class="pl-c1">8000</span></pre></div>
 
-<p>then open http://localhost:8000/demo.html in a browser.</p>
+<p>Then open http://localhost:8000/demo.html in a browser.</p>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h2>
+
+<h3>
+<a id="basic-usage" class="anchor" href="#basic-usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Basic usage</h3>
+
+<p>With very little code, PaperGUI creates an interface that you can use to modify variables, exactly like <a href="https://workshop.chromeexperiments.com/examples/gui/#1--Basic-Usage">dat.GUI</a> from which the below example is adapted.</p>
+
+<div class="highlight highlight-text-html-basic"><pre><span class="pl-s1">&lt;<span class="pl-ent">script</span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>text/javascript<span class="pl-pds">"</span></span>&gt;</span>
+<span class="pl-s1"><span class="pl-k">var</span> <span class="pl-en">FizzyText</span> <span class="pl-k">=</span> <span class="pl-k">function</span>() {</span>
+<span class="pl-s1">  <span class="pl-v">this</span>.<span class="pl-smi">message</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>PaperGUI<span class="pl-pds">'</span></span>;</span>
+<span class="pl-s1">  <span class="pl-v">this</span>.<span class="pl-smi">speed</span> <span class="pl-k">=</span> <span class="pl-c1">0.8</span>;</span>
+<span class="pl-s1">  <span class="pl-v">this</span>.<span class="pl-smi">displayOutline</span> <span class="pl-k">=</span> <span class="pl-c1">false</span>;</span>
+<span class="pl-s1">  <span class="pl-v">this</span>.<span class="pl-en">explode</span> <span class="pl-k">=</span> <span class="pl-k">function</span>() { <span class="pl-k">...</span> };</span>
+<span class="pl-s1">  <span class="pl-c">// Define render logic ...</span></span>
+<span class="pl-s1">};</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-c">/* Polymer elements are loaded asynchronously, we need to wait for</span></span>
+<span class="pl-s1"><span class="pl-c"> * everything to be ready before creating the GUI. */</span></span>
+<span class="pl-s1"><span class="pl-c1">document</span>.<span class="pl-c1">addEventListener</span>(<span class="pl-s"><span class="pl-pds">'</span>PaperGUIReady<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">e</span>) {</span>
+<span class="pl-s1">  <span class="pl-k">var</span> text <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">FizzyText</span>();</span>
+<span class="pl-s1">  <span class="pl-k">var</span> gui <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">PaperGUI</span>();</span>
+<span class="pl-s1">  <span class="pl-smi">gui</span>.<span class="pl-c1">add</span>(text, <span class="pl-s"><span class="pl-pds">'</span>message<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1">  <span class="pl-smi">gui</span>.<span class="pl-c1">add</span>(text, <span class="pl-s"><span class="pl-pds">'</span>speed<span class="pl-pds">'</span></span>, <span class="pl-k">-</span><span class="pl-c1">5</span>, <span class="pl-c1">5</span>);</span>
+<span class="pl-s1">  <span class="pl-smi">gui</span>.<span class="pl-c1">add</span>(text, <span class="pl-s"><span class="pl-pds">'</span>displayOutline<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1">  <span class="pl-smi">gui</span>.<span class="pl-c1">add</span>(text, <span class="pl-s"><span class="pl-pds">'</span>explode<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1">};</span>
+<span class="pl-s1"><span class="pl-k">&lt;</span><span class="pl-k">/</span>script<span class="pl-k">&gt;</span></span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-c">&lt;!--</span> Load the PaperGUI library and polyfills <span class="pl-c">--&gt;</span></span>
+<span class="pl-s1"><span class="pl-k">&lt;</span>script type<span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>text/javascript<span class="pl-pds">"</span></span> src<span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>dist/paperGUI.js<span class="pl-pds">"</span></span><span class="pl-k">&gt;&lt;</span><span class="pl-k">/</span>script<span class="pl-k">&gt;</span></span></pre></div>
+
+<ul>
+<li>The property must be public, i.e. defined by <code>this.prop = value</code>
+</li>
+<li>PaperGUI determines controller type based on a property's initial value</li>
+<li>Press H to show/hide all GUI's.</li>
+</ul>
+
+<h3>
+<a id="constrain" class="anchor" href="#constrain" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Constrain</h3>
+
+<p>You can specify limits on numbers. A number with a min and max value becomes a slider. This is exactly the <a href="https://workshop.chromeexperiments.com/examples/gui/#2--Constraining-Input">same API as dat.GUI</a>.</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-smi">gui</span>.<span class="pl-c1">add</span>(text, <span class="pl-s"><span class="pl-pds">'</span>noiseStrength<span class="pl-pds">'</span></span>).<span class="pl-en">step</span>(<span class="pl-c1">5</span>); <span class="pl-c">// Increment amount</span>
+<span class="pl-smi">gui</span>.<span class="pl-c1">add</span>(text, <span class="pl-s"><span class="pl-pds">'</span>growthSpeed<span class="pl-pds">'</span></span>, <span class="pl-k">-</span><span class="pl-c1">5</span>, <span class="pl-c1">5</span>); <span class="pl-c">// Min and max</span>
+<span class="pl-smi">gui</span>.<span class="pl-c1">add</span>(text, <span class="pl-s"><span class="pl-pds">'</span>maxSize<span class="pl-pds">'</span></span>).<span class="pl-en">min</span>(<span class="pl-c1">0</span>).<span class="pl-en">step</span>(<span class="pl-c1">0.25</span>); <span class="pl-c">// Mix and match</span></pre></div>
+
+<p>You can also choose to select from a dropdown of values for both numbers and strings.</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// Choose from accepted values</span>
+<span class="pl-smi">gui</span>.<span class="pl-c1">add</span>(text, <span class="pl-s"><span class="pl-pds">'</span>message<span class="pl-pds">'</span></span>, [ <span class="pl-s"><span class="pl-pds">'</span>pizza<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>chrome<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>hooray<span class="pl-pds">'</span></span> ] );
+
+
+<span class="pl-c">// Choose from named values</span>
+<span class="pl-smi">gui</span>.<span class="pl-c1">add</span>(text, <span class="pl-s"><span class="pl-pds">'</span>speed<span class="pl-pds">'</span></span>, { Stopped<span class="pl-k">:</span> <span class="pl-c1">0</span>, Slow<span class="pl-k">:</span> <span class="pl-c1">0.1</span>, Fast<span class="pl-k">:</span> <span class="pl-c1">5</span> } );</pre></div>
+
+<h3>
+<a id="events" class="anchor" href="#events" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Events</h3>
+
+<p>You can listen for events on individual controllers using an event listener syntax.</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> controller <span class="pl-k">=</span> <span class="pl-smi">gui</span>.<span class="pl-c1">add</span>(fizzyText, <span class="pl-s"><span class="pl-pds">'</span>maxSize<span class="pl-pds">'</span></span>, <span class="pl-c1">0</span>, <span class="pl-c1">10</span>);
+
+
+<span class="pl-smi">controller</span>.<span class="pl-c1">onChange</span>(<span class="pl-k">function</span>(<span class="pl-smi">value</span>) {
+  <span class="pl-c">// Fires on every change, drag, keypress, etc.</span>
+});</pre></div>
+
+<p>Note: the <code>onFinishChange</code> handler <a href="https://workshop.chromeexperiments.com/examples/gui/#7--Events">from dat.GUI</a> is currently not supported.</p>
+
+<h2>
+<a id="styling--positioning" class="anchor" href="#styling--positioning" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Styling &amp; positioning</h2>
+
+<p>PaperGUI exposes custom CSS properties and mixins (see <a href="https://www.polymer-project.org/1.0/docs/devguide/styling#custom-css-properties">Polymer documentation</a>) through which you can change the colors and style of the UI.</p>
+
+<h3>
+<a id="custom-properties" class="anchor" href="#custom-properties" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Custom properties</h3>
+
+<p>Properties below can be used to modify the default colors of the PaperGUI interface and components:</p>
+
+<table>
+<thead>
+<tr>
+<th>Custom Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--paper-gui-accent-color</code></td>
+<td>Accent used in the floating action button, toggle buttons, sliders, etc.</td>
+</tr>
+<tr>
+<td><code>--paper-gui-accent-contrast-color</code></td>
+<td>Applied to fonts and icons where the background uses accent color (buttons)</td>
+</tr>
+<tr>
+<td><code>--paper-gui-background-color</code></td>
+<td>Background color of the main dialog</td>
+</tr>
+<tr>
+<td><code>--paper-gui-text-color</code></td>
+<td>Main color for text inputs, labels, dropdown values, etc.</td>
+</tr>
+<tr>
+<td><code>--paper-gui-ui-color</code></td>
+<td>Used in components (borders, sliders, input placeholders, etc.)</td>
+</tr>
+<tr>
+<td><code>--paper-gui-ui-secondary-color</code></td>
+<td>Lighter shade of the above color, used in scrollbars and dividers</td>
+</tr>
+</tbody>
+</table>
+
+<h5>
+<a id="example" class="anchor" href="#example" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example</h5>
+
+<p>In your main html file, declare the following <a href="https://www.polymer-project.org/1.0/docs/devguide/styling#custom-css-properties">custom-style</a> to override default colors:</p>
+
+<div class="highlight highlight-text-html-basic"><pre><span class="pl-s1">&lt;<span class="pl-ent">style</span> <span class="pl-e">is</span>=<span class="pl-s"><span class="pl-pds">"</span>custom-style<span class="pl-pds">"</span></span>&gt;</span>
+<span class="pl-s1">  paper-gui {</span>
+<span class="pl-s1">    <span class="pl-c1">--paper-gui-<span class="pl-c1">text</span>-<span class="pl-c1">color</span></span>: <span class="pl-c1">#808080</span>;</span>
+<span class="pl-s1">    <span class="pl-c1">--paper-gui-<span class="pl-c1">background-color</span></span>: <span class="pl-c1">white</span>;</span>
+<span class="pl-s1">    <span class="pl-c1">--paper-gui-accent-<span class="pl-c1">color</span></span>: <span class="pl-c1">#1976d2</span>;</span>
+<span class="pl-s1">    <span class="pl-c1">--paper-gui-ui-<span class="pl-c1">color</span></span>: <span class="pl-c1">#bbb</span>;</span>
+<span class="pl-s1">    <span class="pl-c1">--paper-gui-ui-secondary-<span class="pl-c1">color</span></span>: <span class="pl-c1">#f1f1f1</span>;</span>
+<span class="pl-s1">  }</span>
+<span class="pl-s1">&lt;/<span class="pl-ent">style</span>&gt;</span></pre></div>
+
+<h3>
+<a id="mixins" class="anchor" href="#mixins" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Mixins</h3>
+
+<p>If you need to further customize the edit button or the dialog, ie change their positioning or size, you can use dedicated custom mixins.</p>
+
+<table>
+<thead>
+<tr>
+<th>Custom Mixin</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--paper-gui-edit-button</code></td>
+<td>Use this to customize the edit button</td>
+</tr>
+<tr>
+<td><code>--paper-gui-dialog</code></td>
+<td>Use this to override the size and positioning of the dialog (eg to place it in a different corner)</td>
+</tr>
+</tbody>
+</table>
+
+<h5>
+<a id="example-1" class="anchor" href="#example-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example</h5>
+
+<p>In your main html file:</p>
+
+<div class="highlight highlight-text-html-basic"><pre><span class="pl-s1">&lt;<span class="pl-ent">style</span> <span class="pl-e">is</span>=<span class="pl-s"><span class="pl-pds">"</span>custom-style<span class="pl-pds">"</span></span>&gt;</span>
+<span class="pl-s1">  paper-gui {</span>
+<span class="pl-s1">    <span class="pl-c1">--paper-gui-edit-button</span>: {</span>
+<span class="pl-s1">      position: <span class="pl-c1">relative</span>;</span>
+<span class="pl-s1">      <span class="pl-c1"><span class="pl-c1">top</span></span>: <span class="pl-c1">0</span>;</span>
+<span class="pl-s1">      <span class="pl-c1"><span class="pl-c1">left</span></span>: <span class="pl-c1">0</span>;</span>
+<span class="pl-s1">    };</span>
+<span class="pl-s1">    --paper-gui-<span class="pl-ent">dialog</span>: {</span>
+<span class="pl-s1">      <span class="pl-c1"><span class="pl-c1">position</span></span>: <span class="pl-c1">absolute</span>;</span>
+<span class="pl-s1">      <span class="pl-c1"><span class="pl-c1">top</span></span>: <span class="pl-c1">auto</span>;</span>
+<span class="pl-s1">      <span class="pl-c1"><span class="pl-c1">right</span></span>: <span class="pl-c1">auto</span>;</span>
+<span class="pl-s1">      <span class="pl-c1"><span class="pl-c1">bottom</span></span>: <span class="pl-c1">0</span>;</span>
+<span class="pl-s1">      <span class="pl-c1"><span class="pl-c1">left</span></span>: <span class="pl-c1">0</span>;</span>
+<span class="pl-s1">      <span class="pl-c1"><span class="pl-c1">width</span></span>: <span class="pl-c1">50<span class="pl-k">%</span></span>;</span>
+<span class="pl-s1">    };</span>
+<span class="pl-s1">  }</span>
+<span class="pl-s1">&lt;/<span class="pl-ent">style</span>&gt;</span></pre></div>
+
+<h2>
+<a id="reference" class="anchor" href="#reference" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Reference</h2>
+
+<h3>
+<a id="controller-types" class="anchor" href="#controller-types" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Controller types</h3>
+
+<p>Here's a summary of the controller types PaperGUI currently supports:</p>
+
+<table>
+<thead>
+<tr>
+<th>PaperGUI Controller type</th>
+<th>Property type</th>
+<th>Extra parameters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Button</td>
+<td>Function</td>
+<td><em>N/A</em></td>
+</tr>
+<tr>
+<td>Toggle</td>
+<td>Boolean</td>
+<td><em>N/A</em></td>
+</tr>
+<tr>
+<td>Text input</td>
+<td>String</td>
+<td><em>N/A</em></td>
+</tr>
+<tr>
+<td>Select box</td>
+<td>String</td>
+<td>
+<strong>[String value]</strong> An array of accepted values for the property, required to create a select box instead of a text input)</td>
+</tr>
+<tr>
+<td>Slider</td>
+<td>Number</td>
+<td>
+<strong>Number minValue</strong> (optional, default 0), <strong>Number maxValue</strong> (optional, default 100)</td>
+</tr>
+<tr>
+<td>Select box</td>
+<td>Number</td>
+<td>
+<strong>{String label: Number value}</strong> An object whose property names will be used as labels and corresponding values will be set on the property when selected. Required to create a select box instead of a slider.</td>
+</tr>
+</tbody>
+</table>
+
+<h3>
+<a id="controller-methods" class="anchor" href="#controller-methods" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Controller methods</h3>
+
+<p>All controller methods return themselves, allowing to chain method calls. Here is a list of methods.</p>
+
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+<th>Controller types</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name(labelString)</td>
+<td>Defines the label or placeholder text for the controller</td>
+<td>All</td>
+</tr>
+<tr>
+<td>onChange(callbackFunction)</td>
+<td>Calls the function when the value changes</td>
+<td>All except Button</td>
+</tr>
+<tr>
+<td>min(minNumber)</td>
+<td>Sets the minimum authorized value</td>
+<td>Slider</td>
+</tr>
+<tr>
+<td>max(minNumber)</td>
+<td>Sets the maximum authorized value</td>
+<td>Slider</td>
+</tr>
+<tr>
+<td>step(stepNumber)</td>
+<td>Sets the step size</td>
+<td>Slider</td>
+</tr>
+</tbody>
+</table>
 
 <h2>
 <a id="todo" class="anchor" href="#todo" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>TODO</h2>
 
 <ul>
-<li>Improve documentation &amp; demo</li>
-<li>Increase test coverage</li>
-<li>Add folders/tabs structure capability</li>
+<li>Add live demos</li>
+<li>Add folders/tabs structure capability and other features from the original dat.GUI</li>
 </ul>
 
 <h2>
@@ -71,24 +333,14 @@ the other two.</p>
 <ul>
 <li>Select box change callback fires on controller creation (intended?)</li>
 </ul>
-        </section>
 
-        <aside id="sidebar">
-          <a href="https://github.com/google/paper-gui/zipball/master" class="button">
-            <small>Download</small>
-            .zip file
-          </a>
-          <a href="https://github.com/google/paper-gui/tarball/master" class="button">
-            <small>Download</small>
-            .tar.gz file
-          </a>
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/google/paper-gui">PaperGUI</a> is maintained by <a href="https://github.com/google">google</a>.</span>
 
-          <p class="repo-owner"><a href="https://github.com/google/paper-gui"></a> is maintained by <a href="https://github.com/google">google</a>.</p>
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
 
-          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
-        </aside>
-      </div>
-    </div>
+    </section>
 
   
   </body>
