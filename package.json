@@ -1,15 +1,18 @@
 {
   "name": "papergui",
   "version": "0.2.0",
-  "license" : "Apache-2.0",
-  "repository" : {
-    "type" : "git",
-    "url" : "https://github.com/google/paper-gui.git"
+  "license": "Apache-2.0",
+  "description": "A clone of dat.GUI using Polymer: similar API but with Material Design UI and touch/mobile friendly.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/google/paper-gui.git"
   },
+  "keywords": ["gui", "prototyping", "polymer", "dat.gui"],
   "scripts": {
     "postinstall": "bower install",
     "build": "node node_modules/gulp/bin/gulp.js"
   },
+  "author": "Google",
   "dependencies": {
     "babel": "^5.8.12"
   },
